@@ -1,11 +1,11 @@
 # Testcase Boot To Anaconda With Boot ISO
 
 ## Description
-This is to verify that the Anaconda installer starts correctly when booting from Rocky-<version>-boot.iso.
+This is to verify that the Anaconda installer starts correctly when booting from `Rocky-<version>-boot.iso`.
 
 
 ## Setup
-Prepare your system for booting a Rocky-<version>-boot.iso image. This may involve writing the image to a USB key, mounting it as virtual media via out-of-band management network, or mounting it in hypervisor.
+Prepare your system for booting a `Rocky-<version>-boot.iso` image. This may involve writing the image to a USB key, mounting it as virtual media via out-of-band management network, or mounting it in hypervisor.
 
 
 ## How to test
