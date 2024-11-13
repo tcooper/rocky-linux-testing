@@ -24,68 +24,12 @@
 # Author: Trevor Cooper <tcooper@rockylinux.org>
 #
 
-#set -x
-set -e
-
-log_msg() {
-    printf '\n' | tee -a "$2"
-    printf '=%.0s' {1..80} | tee -a "$2"
-    printf '\n%b\n\n' "$1" | tee -a "$2"
-}
-
 full_path="$(realpath "$0")"
 dir_path="$(dirname "$full_path")"
 parent_path="$(dirname "$dir_path")"
 
-. /etc/os-release
-
-# Defaults
-iso_version="${VERSION_ID}"
-iso_arch="$(arch)"
-iso_type="boot"
-iso_mirror_base="http://dl.rockylinux.org/pub/rocky/${iso_version}/isos"
-iso_prefix="Rocky"
-log_dir="${parent_path}/output/$(date +%Y-%m-%d)"
-
-optstring="ht:a:v:p:c:s:b:k:"
-
-while getopts ${optstring} arg; do
-  case ${arg} in
-    h)
-      usage
-      exit 0
-      ;;
-    t)
-      iso_type="${OPTARG}"
-      ;;
-    a)
-      iso_arch="${OPTARG}"
-      ;;
-    v)
-      iso_version="${OPTARG}"
-      ;;
-    p)
-      iso_prefix="${OPTARG}"
-      ;;
-    b)
-      iso_mirror_base="${OPTARG}"
-      ;;
-    l)
-      log_dir="${OPTARG}"
-      ;;
-    :)
-      echo "$0: Must supply an argument to -$OPTARG." >&2
-      exit 1
-      ;;
-    ?)
-      echo "Invalid option: -${OPTARG}."
-      echo
-      exit 1
-      ;;
-  esac
-done
-
-dnf clean all
+source "${dir_path}/common.sh"
+source "${dir_path}/common_opts.sh"
 
 iso_url="${iso_mirror_base}/${iso_version}/isos/${iso_arch}/${iso_prefix}-${iso_version}-${iso_arch}-${iso_type}.iso"
 iso_name=$(basename "${iso_url}")
@@ -104,29 +48,42 @@ else
   #repodata_dirs=($(find /media -name repodata))
   mapfile -t repodata_dirs < <(find /media -name repodata)
 
+  find /media -name "*comps*.xml" -exec grep -H "insights-client" '{}' \;
+
   if [[ "${repodata_dirs[*]}" =~ "repodata" ]]
   then
-    rc_cmd="dnf --verbose repoclosure"
-    pc_cmd="python3 ${dir_path}/potential_conflict.py"
+    in_cmd="dnf --refresh groupinfo base "
+    pl_cmd="dnf --refresh repoquery --whatrequires subscription-manager "
+    rhsm_cmd="dnf download "
+
     for rd in "${repodata_dirs[@]}"
     do
       dn=$(dirname "${rd}")
       rn=$(basename "${dn}")
-      rc_cmd="${rc_cmd} --repofrompath ${rn},${dn} --repo ${rn}"
-      pc_cmd="${pc_cmd} --repofrompath ${rn},${dn} --repoid ${rn}"
+      in_cmd="${in_cmd} --repofrompath ${rn},${dn} --repo ${rn}"
+      pl_cmd="${pl_cmd} --repofrompath ${rn},${dn} --repo ${rn}"
+      rhsm_cmd="${rhsm_cmd} --repofrompath ${rn},${dn} --repoid ${rn}"
     done
 
-    # dnf repoclosure will/should expose any issues with the repository metadata
-    truncate -s0 "${log_base}.repoclosure.out"
-    log_msg "Running:\n\t${rc_cmd} ..." "${log_base}.repoclosure.out"
-    bash -c "${rc_cmd}" 2>&1 | tee -a "${log_base}.repoclosure.out"
+    # insights-client should not be installed by default
+    truncate -s0 "${log_base}.insights.out"
+    log_msg "Running:\n\t${in_cmd} ..." "${log_base}.insights.out"
+    bash -c "${in_cmd}" | tee -a "${log_base}.insights.out"
 
-    # potential_conflict.py should uncover any packages with package or unanticipated file conflicts
-    truncate -s0 "${log_base}.package_file_conflicts.out"
-    log_msg "Running:\n\t${pc_cmd} ..." "${log_base}.package_file_conflicts.out"
-    bash -c "${pc_cmd}" 2>&1 | tee "${log_base}.package_file_conflicts.out"
+    # redhat-subscription-manager should not include refs to Redhat
+    truncate -s0 "${log_base}.rhsm.out"
+    log_msg "Running:\n\t${pl_cmd} ..." "${log_base}.rhsm.out"
+
+    #package_list=($(bash -c "${pl_cmd}" | tee -a "${log_base}.rhsm.out"))
+    mapfile -t package_list < <(bash -c "${pl_cmd}" | tee -a "${log_base}.rhsm.out")
+    
+    rhsm_cmd="${rhsm_cmd} ${package_list[*]}"
+     
+    log_msg "Running:\n\t${rhsm_cmd} ..." "${log_base}.rhsm.out"
+    bash -c "${rhsm_cmd}" | tee "${log_base}.rhsm.out"
 
   fi
 
   sudo umount /media
 fi
+

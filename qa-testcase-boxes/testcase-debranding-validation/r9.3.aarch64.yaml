@@ -111,8 +111,8 @@
   "grub2":
     modular: false
     check: BinaryStrings
-    nvr_pkg: grub2-efi-x64-2.06-70.el9_3.1.rocky.0.2
-    file: /boot/efi/EFI/rocky/grubx64.efi
+    nvr_pkg: grub2-efi-aa64-2.06-70.el9_3.1.rocky.0.2
+    file: /boot/efi/EFI/rocky/grubaa64.efi
     content: Rocky Linux Secure Boot Root CA
     value: true
     pkg_arch:
@@ -130,7 +130,7 @@
     modular: false
     check: BinaryStrings
     nvr_pkg: kernel-core-5.14.0-362.8.1.el9_3
-    file: /lib/modules/5.14.0-362.8.1.el9_3.x86_64/vmlinuz
+    file: /lib/modules/5.14.0-362.el9.x86_64/vmlinuz
     content: Rocky Linux Secure Boot Root CA
     value: true
     pkg_arch:
@@ -139,7 +139,7 @@
     modular: false
     check: BinaryStrings
     nvr_pkg: kernel-rt-core-5.14.0-362.8.1.el9_3
-    file: /lib/modules/5.14.0-362.8.1.el9_3.x86_64+rt/vmlinuz
+    file: /lib/modules/5.14.0-362.el9.x86_64+rt/vmlinuz
     content: Rocky Linux Secure Boot Root CA
     value: true
     pkg_arch:
@@ -318,7 +318,7 @@
   "WALinuxAgent":
     modular: false
     check: FileContents
-    nvr_pkg: WALinuxAgent-2.7.0.6-9.el9_2.1.rocky.1.0
+    nvr_pkg: WALinuxAgent-2.7.0.6-9.el9_2.1.rocky.0
     file: /usr/lib/python3.9/site-packages/azurelinuxagent/common/osutil/factory.py
     content: rocky
     value: true

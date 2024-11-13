@@ -4,7 +4,7 @@ set -e
 
 t="${1:-dvd1}"
 a="${2:-x86_64}"
-v="${3:-8.6}"
+v="${3:-9.4}"
 
 full_path="$(realpath "$0")"
 script_path="$(dirname "$full_path")"

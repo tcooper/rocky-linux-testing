@@ -219,7 +219,16 @@
     source:
   "kernel":
     modular: false
-    check: FileContents
+    check: BinaryStrings
+    nvr_pkg: kernel-core-4.18.0-553.el8_10
+    file: /lib/modules/4.18.0-553.el8_10.x86_64/vmlinuz
+    content: Rocky Linux Secure Boot Root CA
+    value: true
+    pkg_arch: x86_64
+    source:
+  "kernel":
+    modular: false
+    check: Strings
     nvr_pkg: kernel-core-4.18.0-553.el8_10
     file: /lib/modules/4.18.0-553.el8_10.aarch64/config
     content: Rocky Linux 8 - Kernel Cryptographic API

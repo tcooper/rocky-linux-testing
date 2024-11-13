@@ -1,7 +1,8 @@
 ---
 "dev":
   "host": yumrepofs.pdot-dev.rockylinux.org
-  "projectID": c4fa14a2-5af6-4634-bfea-847a9fd639c7
+  "projectID": e7b83c0a-b514-4903-b739-6943bbb307f7
 "prod":
   "host": yumrepofs.build.resf.org
-  "projectID": dff20351-7d36-4f7c-9eea-7f039f5026d0
+  "projectID": e7b83c0a-b514-4903-b739-6943bbb307f7
+    #  "projectID": df5bcbfc-ba83-4da8-84d6-ae0168921b4d

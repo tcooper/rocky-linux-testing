@@ -318,7 +318,7 @@
   "WALinuxAgent":
     modular: false
     check: FileContents
-    nvr_pkg: WALinuxAgent-2.7.0.6-9.el9_2.1.rocky.1.0
+    nvr_pkg: WALinuxAgent-2.7.0.6-9.el9_2.1.rocky.0
     file: /usr/lib/python3.9/site-packages/azurelinuxagent/common/osutil/factory.py
     content: rocky
     value: true
