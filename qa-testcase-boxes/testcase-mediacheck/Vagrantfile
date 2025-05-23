@@ -51,9 +51,9 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "shell" do |script|
-    script.name   = "Rocky #{cfg['version']} #{cfg['arch']} dvd1 ISO"
+    script.name   = "Rocky #{cfg['version']} #{cfg['arch']} dvd ISO"
     script.inline = "/vagrant/scripts/test_wrapper.sh $1 $2 $3 $4"
-    script.args   = ["dvd1", "#{ cfg['arch'] }", "#{ cfg['version'] }", "#{ cfg['download_base'] }"]
+    script.args   = ["dvd", "#{ cfg['arch'] }", "#{ cfg['version'] }", "#{ cfg['download_base'] }"]
   end
 
   config.vm.provision "shell", name: "End Timestamp", inline: <<-SHELL

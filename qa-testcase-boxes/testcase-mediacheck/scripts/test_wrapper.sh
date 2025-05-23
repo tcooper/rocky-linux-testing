@@ -5,7 +5,7 @@
 t="${1:-boot}"
 a="${2:-$(arch)}"
 v="${3:-${VERSION_ID}}"
-b="${4:-http://dl.rockylinux.org/pub/rocky/8/isos}"
+b="${4:-http://dl.rockylinux.org/pub/rocky/9/isos}"
 c="${5:-CHECKSUM}"
 
 full_path="$(realpath "$0")"

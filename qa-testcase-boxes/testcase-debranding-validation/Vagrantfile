@@ -23,6 +23,11 @@ Vagrant.configure("2") do |config|
     vb.cpus = cfg["box_cpus"]
   end
 
+  # set auto_update to false, if you do NOT want to check the correct 
+  # additions version when booting this machine, set auto_update to true
+  # if/when updating and a new kernel arrives.
+  config.vbguest.auto_update = false
+
   config.vm.provision "shell", name: "Start Timestamp", inline: <<-SHELL
     echo "Starting QA:Testcase-Debranding on $(date)"
   SHELL
