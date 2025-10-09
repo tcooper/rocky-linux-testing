@@ -29,7 +29,6 @@ dir_path="$(dirname "$full_path")"
 parent_path="$(dirname "$dir_path")"
 
 source "${dir_path}/common.sh"
-source "${dir_path}/common_opts.sh"
 
 iso_url="${iso_mirror_base}/${iso_version}/isos/${iso_arch}/${iso_prefix}-${iso_version}-${iso_arch}-${iso_type}.iso"
 iso_name=$(basename "${iso_url}")
@@ -76,9 +75,9 @@ else
 
     #package_list=($(bash -c "${pl_cmd}" | tee -a "${log_base}.rhsm.out"))
     mapfile -t package_list < <(bash -c "${pl_cmd}" | tee -a "${log_base}.rhsm.out")
-    
+
     rhsm_cmd="${rhsm_cmd} ${package_list[*]}"
-     
+
     log_msg "Running:\n\t${rhsm_cmd} ..." "${log_base}.rhsm.out"
     bash -c "${rhsm_cmd}" | tee "${log_base}.rhsm.out"
 
@@ -86,4 +85,3 @@ else
 
   sudo umount /media
 fi
-

@@ -7,7 +7,6 @@ full_path="$(realpath "$0")"
 dir_path="$(dirname "$full_path")"
 parent_path="$(dirname "$dir_path")"
 
-# shellcheck disable=1091
 . /etc/os-release
 
 log_msg() {
@@ -28,3 +27,4 @@ iso_key_name="RPM-GPG-KEY-rockyofficial"
 iso_key_url="https://dl.rockylinux.org/pub/rocky/RPM-GPG-KEY-rockyofficial"
 log_dir="${parent_path}/output/$(date +%Y-%m-%d)"
 
+source "${dir_path}/common_opts.sh"
