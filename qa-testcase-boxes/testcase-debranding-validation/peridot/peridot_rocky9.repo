@@ -1,26 +1,26 @@
 # rocky.repo
 #
-# Peridot Project for Rocky Linux 9.5 = ae163d6a-f050-484f-bbaa-100ca673f146
-# Repository names from https://peridot.build.resf.org/ae163d6a-f050-484f-bbaa-100ca673f146/repositories
+# Peridot Project for Rocky Linux 9.6 = 05d2a73d-41c8-4ee1-b079-99d02c23a4bd
+# Repository names from https://peridot.build.resf.org/05d2a73d-41c8-4ee1-b079-99d02c23a4bd/repositories
 #
 
 [baseos]
-name=Rocky Linux Peridot 9.5 - BaseOS
-baseurl=https://yumrepofs.build.resf.org/v1/projects/ae163d6a-f050-484f-bbaa-100ca673f146/repo/BaseOS/$basearch
+name=Rocky Linux Peridot 9.6 - BaseOS
+baseurl=https://yumrepofs.build.resf.org/v1/projects/05d2a73d-41c8-4ee1-b079-99d02c23a4bd/repo/BaseOS/$basearch
 gpgcheck=0
 enabled=1
 priority=10
 
 [appstream]
-name=Rocky Linux Peridot 9.5 - AppStream
-baseurl=https://yumrepofs.build.resf.org/v1/projects/ae163d6a-f050-484f-bbaa-100ca673f146/repo/AppStream/$basearch
+name=Rocky Linux Peridot 9.6 - AppStream
+baseurl=https://yumrepofs.build.resf.org/v1/projects/05d2a73d-41c8-4ee1-b079-99d02c23a4bd/repo/AppStream/$basearch
 gpgcheck=0
 enabled=1
 priority=10
 
 [crb]
-name=Rocky Linux Peridot 9.5 - CRB
-baseurl=https://yumrepofs.build.resf.org/v1/projects/ae163d6a-f050-484f-bbaa-100ca673f146/repo/CRB/$basearch
+name=Rocky Linux Peridot 9.6 - CRB
+baseurl=https://yumrepofs.build.resf.org/v1/projects/05d2a73d-41c8-4ee1-b079-99d02c23a4bd/repo/CRB/$basearch
 gpgcheck=0
 enabled=1
 priority=10

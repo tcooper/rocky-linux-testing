@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo -e "======== DEBRANDED PKGS ========"
-mapfile -t debrand_pkgs < <(yq '.debrand.r8 + .debrand.all | sort() | .[]' patch.yml | tr '\n' ' ')
+mapfile -t debrand_pkgs < <(yq '.debrand.r9 + .debrand.all | sort() | .[]' patch.yml | tr '\n' ' ')
 
 for pkg in "${debrand_pkgs[@]}"
 do

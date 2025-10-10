@@ -88,15 +88,15 @@ parent_path="$(dirname "$dir_path")"
 
 # Defaults
 iso_type="dvd1"
-iso_version="8.6"
+iso_version="9.6"
 iso_arch="$(arch)"
 baseurl="http://dl.rockylinux.org/pub/rocky"
 iso_baseurl="${baseurl}/${iso_version}/isos"
 iso_prefix="Rocky"
 log_dir="$(pwd)/output/$(date +%Y-%m-%d)"
 repo_names="baseos,appstream,powertools,extras"
-koji_tag="dist-rocky8-compose"
-rocky_rel="8"
+koji_tag="dist-rocky9-compose"
+rocky_rel="9"
 log_dir="${parent_path}/output/$(date +%Y-%m-%d)"
 log_file_suffix="debrand_validation.out"
 extended=0
