@@ -24,71 +24,16 @@
 # Author: Trevor Cooper <tcooper@rockylinux.org>
 #
 
-#set -x
-set -e
-
-log_msg() {
-    printf '\n' | tee -a "$2"
-    printf '=%.0s' {1..80} | tee -a "$2"
-    printf '\n%b\n\n' "$1" | tee -a "$2"
-}
-
 full_path="$(realpath "$0")"
 dir_path="$(dirname "$full_path")"
 parent_path="$(dirname "$dir_path")"
 
-. /etc/os-release
-
-# Defaults
-iso_version="${VERSION_ID}"
-iso_arch="$(arch)"
-iso_type="boot"
-iso_mirror_base="http://dl.rockylinux.org/pub/rocky/${iso_version}/isos"
-iso_prefix="Rocky"
-log_dir="${parent_path}/output/$(date +%Y-%m-%d)"
-
-optstring="ht:a:v:p:c:s:b:k:"
-
-while getopts ${optstring} arg; do
-  case ${arg} in
-    h)
-      usage
-      exit 0
-      ;;
-    t)
-      iso_type="${OPTARG}"
-      ;;
-    a)
-      iso_arch="${OPTARG}"
-      ;;
-    v)
-      iso_version="${OPTARG}"
-      ;;
-    p)
-      iso_prefix="${OPTARG}"
-      ;;
-    b)
-      iso_mirror_base="${OPTARG}"
-      ;;
-    l)
-      log_dir="${OPTARG}"
-      ;;
-    :)
-      echo "$0: Must supply an argument to -$OPTARG." >&2
-      exit 1
-      ;;
-    ?)
-      echo "Invalid option: -${OPTARG}."
-      echo
-      exit 1
-      ;;
-  esac
-done
-
-dnf clean all
+source "${dir_path}/common.sh"
 
 iso_url="${iso_mirror_base}/${iso_version}/isos/${iso_arch}/${iso_prefix}-${iso_version}-${iso_arch}-${iso_type}.iso"
 iso_name=$(basename "${iso_url}")
+
+dnf clean all
 
 mkdir -pv "${log_dir}"
 log_base="${log_dir}/${iso_name}"
