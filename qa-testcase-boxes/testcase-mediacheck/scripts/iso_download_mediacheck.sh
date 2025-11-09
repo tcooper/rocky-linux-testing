@@ -28,7 +28,7 @@ full_path="$(realpath "$0")"
 dir_path="$(dirname "$full_path")"
 parent_path="$(dirname "$dir_path")"
 
-source "${dir_path}/common.sh"
+source "${dir_path}/common_opts.sh"
 
 iso_url="${iso_mirror_base}/${iso_arch}/${iso_prefix}-${iso_version}-${iso_arch}-${iso_type}.iso"
 iso_name=$(basename "${iso_url}")
