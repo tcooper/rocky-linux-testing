@@ -185,8 +185,9 @@ declare -r patch_yml="https://git.rockylinux.org/rocky/metadata/-/raw/main/patch
 if (( ${#all_pkgs[@]} == 0 )); then
   # get patch.yml from git.r.o and extract debrand pkgs
   #curl -sLOR "${patch_yml}"
-  readarray all_pkgs < <(/usr/local/bin/yq '.debrand.r'"${rocky_rel}"' + .debrand.all | sort() | .[]' patch.yml)
+  readarray all_pkgs < <(/usr/local/bin/yq '.debrand | [.r'"${rocky_rel}"', .all] | .[] | .[]' patch.yml | sort)
 fi
+/usr/local/bin/yq '.debrand | [.r9, .all] | .[] | .[]' patch.yml | sort
 
 # Configure downloads to be from koji, repository, ISO or use package cache
 if [[ "${iso_type}" == *"koji"* ]]; then
