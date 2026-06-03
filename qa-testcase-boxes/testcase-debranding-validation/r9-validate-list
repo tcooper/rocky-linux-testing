@@ -1,35 +1,35 @@
-abrt
-anaconda
-anaconda-user-help
-cloud-init
-crash
-dhcp
-dnf
-firefox
-fwupd
-gcc
-gnome-session
-gnome-settings-daemon
-grub2
-initial-setup
-kernel
-kernel-rt
-libdnf
-libreoffice
-libreport
-lorax-templates-rhel
-nginx
-openscap
-osbuild-composer
-PackageKit
-python-pip
-redhat-rpm-config
-scap-security-guide
-shim
-shim-unsigned-aarch64
-shim-unsigned-x64
-subscription-manager
-subscription-manager-cockpit
-systemd
-thunderbird
-WALinuxAgent
+anaconda                      anaconda-core
+anaconda-user-help            anaconda-user-help
+cloud-init                    cloud-init
+cockpit                       cockpit-composer
+crash                         crash
+dhcp                          dhcp
+dnf                           python3-dnf
+elfutils                      elfutils
+firefox                       firefox
+fwupd                         fwupd
+gcc                           gcc
+gnome-session                 gnome-session
+gnome-settings-daemon         gnome-settings-daemon
+grub2                         grub2-efi-x64
+ima-evm-utils                 ima-evm-utils
+initial-setup                 initial-setup-gui
+kernel                        kernel-core
+kernel-rt                     kernel-rt-core
+libdnf                        libdnf
+libreoffice                   libreoffice
+libreport                     libreport
+lorax-templates-rhel          lorax-templates-rhel
+nginx                         nginx
+openscap                      openscap
+osbuild                       osbuild
+osbuild-composer              osbuild-composer
+python-pip                    python3-pip
+redhat-rpm-config             redhat-rpm-config
+scap-security-guide           scap-security-guide
+shim                          shim-x64
+subscription-manager          subscription-manager
+subscription-manager-cockpit  subscription-manager-cockpit
+systemd                       systemd
+thunderbird                   thunderbird
+toolbox                       toolbox

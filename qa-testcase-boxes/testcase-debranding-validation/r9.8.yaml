@@ -130,7 +130,7 @@
     modular: false
     check: FileContents
     nvr_pkg: grub2-tools-minimal-2.06-126.el9_8.rocky.0.2
-    file: usr/sbin/grub2-set-password
+    file: /usr/sbin/grub2-set-password
     content: bugs.rockylinux.org
     value: true
     pkg_arch:
@@ -156,8 +156,8 @@
   "kernel":
     modular: false
     check: BinaryStrings
-    nvr_pkg: kernel-core-5.14.0-687.10.1.el9_8
-    file: /lib/modules/5.14.0-687.10.1.el9_8.x86_64/vmlinuz
+    nvr_pkg: kernel-core-5.14.0-687.10.1.el9_8.0.1
+    file: /lib/modules/5.14.0-687.10.1.el9_8.0.1.x86_64/vmlinuz
     content: Rocky Linux Secure Boot Root CA
     value: true
     pkg_arch:
@@ -165,8 +165,8 @@
   "kernel-rt":
     modular: false
     check: BinaryStrings
-    nvr_pkg: kernel-rt-core-5.14.0-687.10.1.el9_8
-    file: /lib/modules/5.14.0-687.10.1.el9_8.x86_64+rt/vmlinuz
+    nvr_pkg: kernel-rt-core-5.14.0-687.10.1.el9_8.0.1
+    file: /lib/modules/5.14.0-687.10.1.el9_8.0.1.x86_64+rt/vmlinuz
     content: Rocky Linux Secure Boot Root CA
     value: true
     pkg_arch:
