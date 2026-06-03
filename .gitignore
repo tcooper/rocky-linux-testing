@@ -4,6 +4,7 @@ CHECKSUM*
 RPM-GPG-KEY*
 *.cache
 *.diff
+*.history*
 *.iso
 *.log
 *.out
