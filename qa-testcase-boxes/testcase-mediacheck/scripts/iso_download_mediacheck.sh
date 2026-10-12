@@ -30,11 +30,11 @@ parent_path="$(dirname "$dir_path")"
 
 source "${dir_path}/common_opts.sh"
 
-iso_url="${iso_mirror_base}/${iso_arch}/${iso_prefix}-${iso_version}-${iso_arch}-${iso_type}.iso"
+iso_url="${iso_mirror_base}/${iso_content_dir}/${iso_version}/isos/${iso_arch}/${iso_prefix}-${iso_version}-${iso_arch}-${iso_type}.iso"
 iso_name=$(basename "${iso_url}")
 
-iso_checksum_url="${iso_mirror_base}/${iso_arch}/${iso_checksum_name}"
-iso_checksum_sig_url="${iso_mirror_base}/${iso_arch}/${iso_checksum_name}${iso_checksum_sig}"
+iso_checksum_url="${iso_mirror_base}/${iso_content_dir}/${iso_version}/isos/${iso_arch}/${iso_checksum_name}"
+iso_checksum_sig_url="${iso_mirror_base}/${iso_content_dir}/${iso_version}/isos/${iso_arch}/${iso_checksum_name}${iso_checksum_sig}"
 
 mkdir -pv "${log_dir}" || exit
 log_base="${log_dir}/${iso_name}"
@@ -49,14 +49,20 @@ printf -v msg "%s"  "Derived URLs...\n\n" \
                     "iso_key_url:          ${iso_key_url}"
 log_msg "${msg}" "${log_file}"
 
+# Verify rpm pre-requisites are met
+rpm -q curl || sudo dnf -y install curl || exit 1
+rpm -q openssl || sudo dnf -y install openssl || exit 1
+rpm -q gnupg2 || suo dnf -y install gnupg2 || exit 1
+rpm -q isomd5sum || sudo dnf -y install isomd5sum || exit 1
+
 curl_opts="-LRsvf"
 curl_suffix="?v=$(openssl rand -hex 16)"
 
-# First verify the iso_mirror_base and iso_url locations exist
+# Verify the iso_mirror_base and iso_url locations exist
 log_msg "Verifying: ${iso_mirror_base} exists..." "${log_file}"
-if ! curl --silent --fail -I "${iso_mirror_base}" >/dev/null 2>&1
+if ! curl --silent --fail -I "${iso_mirror_base}/${iso_content_dir}/${iso_version}/isos" >/dev/null 2>&1
 then
-  log_msg "ERROR: ${iso_mirror_base} does NOT exist." "${log_file}"
+  log_msg "ERROR: ${iso_mirror_base}/${iso_content_dir}/${iso_version}/isos does NOT exist." "${log_file}"
   exit
 fi
 
@@ -67,7 +73,7 @@ then
   exit
 fi
 
-# Always re-pull the CHECKSUM and CHECKSUM.sig because arches use common filename
+# Always re-pull the CHECKSUM and CHECKSUM signature because arches use common filename
 log_msg "Downloading: ${iso_checksum_url} ..." "${log_file}"
 curl "${curl_opts}" "${iso_checksum_url}${curl_suffix}" -o "${parent_path}/$(basename "${iso_checksum_url}")" 2>&1 | \
   tee -a "${log_base}.mediacheck.out"
@@ -87,7 +93,7 @@ else
   test -f "${parent_path}/${iso_checksum_name}${iso_checksum_sig}" || exit
 fi
 
-# Pull the signing key and ISO only if they don't exist in $PWD
+# Pull the signing key only if it doesn't exist in $PWD
 test -f "${iso_key_name}" || \
   ( \
     log_msg "Downloading: ${iso_key_url} ..." "${log_file}"; \
@@ -95,6 +101,7 @@ test -f "${iso_key_name}" || \
   ) | tee -a "${log_base}.mediacheck.out"
 test -f "${parent_path}/${iso_key_name}" || exit
 
+# Pull the ISO only if it doesn't exist in $PWD, it may have been copied from $PWD/isos by wrapper
 test -f "${iso_name}" || \
   ( \
     log_msg "Downloading: ${iso_name} ..." "${log_file}"; \
@@ -108,8 +115,9 @@ gpg --import "${parent_path}/${iso_key_name}" 2>&1 | \
   tee -a "${log_base}.mediacheck.out"
 log_msg "Verifying gpg signature: ${parent_path}/${iso_checksum_name}${iso_checksum_sig} ..." | \
   tee -a "${log_base}.mediacheck.out"
-gpg --verify-files "${parent_path}/${iso_checksum_name}${iso_checksum_sig}"  2>&1 | \
-  tee -a "${log_base}.mediacheck.out"
+gpg --verify-files "${parent_path}/${iso_checksum_name}${iso_checksum_sig}" 2>&1 | \
+  tee -a "${log_base}.mediacheck.out" | \
+  grep -Ei 'good signature' || log_msg "WARNING: GPG signature is not recognized"
 
 # Verify the externally generated sha256sum of the ISO
 log_msg "Verifying sha256sum: ${parent_path}/${iso_name} ..."  "${log_file}"
