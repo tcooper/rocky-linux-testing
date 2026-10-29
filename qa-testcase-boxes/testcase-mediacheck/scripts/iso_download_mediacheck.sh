@@ -50,10 +50,10 @@ printf -v msg "%s"  "Derived URLs...\n\n" \
 log_msg "${msg}" "${log_file}"
 
 # Verify rpm pre-requisites are met
-rpm -q curl || sudo dnf -y install curl || exit 1
-rpm -q openssl || sudo dnf -y install openssl || exit 1
-rpm -q gnupg2 || suo dnf -y install gnupg2 || exit 1
-rpm -q isomd5sum || sudo dnf -y install isomd5sum || exit 1
+rpm --quiet -q curl || sudo dnf -y install curl || exit 1
+rpm --quiet -q openssl || sudo dnf -y install openssl || exit 1
+rpm --quiet -q gnupg2 || suo dnf -y install gnupg2 || exit 1
+rpm --quiet -q isomd5sum || sudo dnf -y install isomd5sum || exit 1
 
 curl_opts="-LRsvf"
 curl_suffix="?v=$(openssl rand -hex 16)"
