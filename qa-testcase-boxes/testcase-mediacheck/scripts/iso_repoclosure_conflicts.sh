@@ -54,6 +54,25 @@ else
     rc_cmd="dnf repoclosure"
     rpm --quiet -q dnf5 && rc_cmd="dnf5 repoclosure"
     pc_cmd="python3 ${dir_path}/potential_conflict.py"
+
+    case "${iso_arch}" in
+      x86_64)
+        rc_cmd="${rc_cmd} --arch=x86_64 --arch=athlon --arch=i686 --arch=i586 --arch=i486 --arch=i386 --arch=noarch --forcearch=x86_64"
+	;;
+      aarch64)
+        rc_cmd="${rc_cmd} --arch=aarch64 --arch=noarch --forcearch=aarch64"
+	;;
+      ppc64le)
+        rc_cmd="${rc_cmd} --arch=ppc64le --arch=noarch --forcearch=ppc64le"
+	;;
+      s390x)
+        rc_cmd="${rc_cmd} --arch=s390x --arch=noarch --forcearch=s390x"
+	;;
+      *)
+        rc_cmd="${rc_cmd} --arch=${iso_arch} --forcearch=${iso_arch}"
+        ;;
+    esac
+
     for rd in "${repodata_dirs[@]}"
     do
       dn=$(dirname "${rd}")
