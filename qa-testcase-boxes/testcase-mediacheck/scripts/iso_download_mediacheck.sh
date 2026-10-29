@@ -81,7 +81,7 @@ fi
 # Always re-pull the CHECKSUM and CHECKSUM signature because arches use common filename
 log_msg "Downloading: ${iso_checksum_url} ..." "${log_file}"
 curl "${curl_opts}" "${iso_checksum_url}${curl_suffix}" -o "${parent_path}/$(basename "${iso_checksum_url}")" 2>&1 | \
-  tee -a "${log_base}.mediacheck.out"
+  tee -a "${log_file}"
 test -f "${parent_path}/${iso_checksum_name}" || exit 1
 
 log_msg "Verifying: ${iso_checksum_sig_url} exists..." "${log_file}"
@@ -95,7 +95,7 @@ else
   log_msg "Downloading: ${iso_checksum_sig_url} ..." "${log_file}"
   set -e
   curl "${curl_opts}" "${iso_checksum_sig_url}${curl_suffix}" -o "${parent_path}/$(basename "${iso_checksum_sig_url}")" 2>&1 | \
-    tee -a "${log_base}.mediacheck.out"
+    tee -a "${log_file}"
   test -f "${parent_path}/${iso_checksum_name}${iso_checksum_sig}" || exit 1
 fi
 
@@ -104,7 +104,7 @@ test -f "${iso_key_name}" || \
   ( \
     log_msg "Downloading: ${iso_key_url} ..." "${log_file}"; \
     curl "${curl_opts}" "${iso_key_url}${curl_suffix}" -o "${parent_path}/$(basename "${iso_key_url}")" 2>&1 \
-  ) | tee -a "${log_base}.mediacheck.out"
+  ) | tee -a "${log_file}"
 test -f "${parent_path}/${iso_key_name}" || exit 1
 
 # Pull the ISO only if it doesn't exist in $PWD, it may have been copied from $PWD/isos by wrapper
@@ -112,7 +112,7 @@ test -f "${iso_name}" || \
   ( \
     log_msg "Downloading: ${iso_name} ..." "${log_file}"; \
     curl "${curl_opts}" "${iso_url}${curl_suffix}" -o "${parent_path}/$(basename "${iso_url}")" 2>&1 \
-  ) | tee -a "${log_base}.mediacheck.out"
+  ) | tee -a "${log_file}"
 test -f "${iso_name}" || exit 1
 
 # Verify the CHECKSUM file using gpg
@@ -128,9 +128,9 @@ gpg --verify-files "${parent_path}/${iso_checksum_name}${iso_checksum_sig}" 2>&1
 # Verify the externally generated sha256sum of the ISO
 log_msg "Verifying sha256sum: ${parent_path}/${iso_name} ..."  "${log_file}"
 sha256sum --ignore-missing -c "${parent_path}/${iso_checksum_name}"  2>&1 | \
-  tee -a "${log_base}.mediacheck.out"
+  tee -a "${log_file}"
 
 # Verify the internal md5sum that is inside the ISO
 log_msg "Verifying internal ISO md5: ${parent_path}/${iso_name} ..." "${log_file}"
 checkisomd5 "${parent_path}/${iso_name}"  2>&1 | \
-  tee -a "${log_base}.mediacheck.out"
+  tee -a "${log_file}"
