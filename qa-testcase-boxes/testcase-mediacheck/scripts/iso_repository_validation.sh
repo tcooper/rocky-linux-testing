@@ -77,11 +77,25 @@ else
     #package_list=($(bash -c "${pl_cmd}" | tee -a "${log_base}.rhsm.out"))
     mapfile -t package_list < <(bash -c "${pl_cmd}" | tee -a "${log_base}.rhsm.out")
 
-    rhsm_cmd="${rhsm_cmd} ${package_list[*]}"
+    if [[ ${#package_list[@]} -gt 0 ]]
+    then
+      rhsm_cmd="${rhsm_cmd} ${package_list[*]}"
 
       log_msg "Running:\n\t${rhsm_cmd} ..." "${log_base}.rhsm.out"
       bash -x -c "${rhsm_cmd}" | tee "${log_base}.rhsm.out"
 
+      while IFS= read -r -d '' pkg
+      do
+        log_msg "Analyzing:\n\t${pkg} ..." "${log_base}.rhsm.out"
+        bash -x -c "rpm -q --requires -p ${pkg}" | tee "${log_base}.rhsm.out"
+
+        log_msg "Removing:\n\t${pkg} ..." "${log_base}.rhsm.out"
+        bash -x -c "/bin/rm -fv ${pkg}" | tee "${log_base}.rhsm.out"
+      done < <(find . -name '*.rpm' -print0)
+
+    else
+      log_msg "No RHSM packages found." "${log_base}.rhsm.out"
+    fi
   fi
 
   sudo umount /media
