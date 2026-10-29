@@ -86,7 +86,8 @@ then
   log_msg "WARNING: ${iso_checksum_sig_url} does NOT exist.\nWARNING: GPG signature validation of ${iso_checksum_name} will fail." "${log_file}"
   set -e
 else
-  log_msg "Downloading: ${iso_checksum_sig_url} ..." "${log_base}" "${log_file}"
+  echo "FOUND: ${iso_checksum_sig_url}" | tee -a "${log_file}"
+  log_msg "Downloading: ${iso_checksum_sig_url} ..." "${log_file}"
   set -e
   curl "${curl_opts}" "${iso_checksum_sig_url}${curl_suffix}" -o "${parent_path}/$(basename "${iso_checksum_sig_url}")" 2>&1 | \
     tee -a "${log_base}.mediacheck.out"
