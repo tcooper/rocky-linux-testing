@@ -63,21 +63,22 @@ log_msg "Verifying: ${iso_mirror_base} exists..." "${log_file}"
 if ! curl --silent --fail -I "${iso_mirror_base}/${iso_content_dir}/${iso_version}/isos" >/dev/null 2>&1
 then
   log_msg "ERROR: ${iso_mirror_base}/${iso_content_dir}/${iso_version}/isos does NOT exist." "${log_file}"
-  exit
+  exit 1
 fi
 
 log_msg "Verifying: ${iso_url} exists..." "${log_file}"
 if ! curl --silent --fail -I "${iso_url}" >/dev/null 2>&1
 then
   log_msg "ERROR: ${iso_url} does NOT exist." "${log_file}"
-  exit
+  exit 1
+else
 fi
 
 # Always re-pull the CHECKSUM and CHECKSUM signature because arches use common filename
 log_msg "Downloading: ${iso_checksum_url} ..." "${log_file}"
 curl "${curl_opts}" "${iso_checksum_url}${curl_suffix}" -o "${parent_path}/$(basename "${iso_checksum_url}")" 2>&1 | \
   tee -a "${log_base}.mediacheck.out"
-test -f "${parent_path}/${iso_checksum_name}" || exit
+test -f "${parent_path}/${iso_checksum_name}" || exit 1
 
 log_msg "Verifying: ${iso_checksum_sig_url} exists..." "${log_file}"
 set +e
@@ -91,7 +92,7 @@ else
   set -e
   curl "${curl_opts}" "${iso_checksum_sig_url}${curl_suffix}" -o "${parent_path}/$(basename "${iso_checksum_sig_url}")" 2>&1 | \
     tee -a "${log_base}.mediacheck.out"
-  test -f "${parent_path}/${iso_checksum_name}${iso_checksum_sig}" || exit
+  test -f "${parent_path}/${iso_checksum_name}${iso_checksum_sig}" || exit 1
 fi
 
 # Pull the signing key only if it doesn't exist in $PWD
@@ -100,7 +101,7 @@ test -f "${iso_key_name}" || \
     log_msg "Downloading: ${iso_key_url} ..." "${log_file}"; \
     curl "${curl_opts}" "${iso_key_url}${curl_suffix}" -o "${parent_path}/$(basename "${iso_key_url}")" 2>&1 \
   ) | tee -a "${log_base}.mediacheck.out"
-test -f "${parent_path}/${iso_key_name}" || exit
+test -f "${parent_path}/${iso_key_name}" || exit 1
 
 # Pull the ISO only if it doesn't exist in $PWD, it may have been copied from $PWD/isos by wrapper
 test -f "${iso_name}" || \
@@ -108,7 +109,7 @@ test -f "${iso_name}" || \
     log_msg "Downloading: ${iso_name} ..." "${log_file}"; \
     curl "${curl_opts}" "${iso_url}${curl_suffix}" -o "${parent_path}/$(basename "${iso_url}")" 2>&1 \
   ) | tee -a "${log_base}.mediacheck.out"
-test -f "${iso_name}" || exit
+test -f "${iso_name}" || exit 1
 
 # Verify the CHECKSUM file using gpg
 log_msg "Importing: ${iso_key_name} ..." "${log_file}"
