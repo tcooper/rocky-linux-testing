@@ -83,13 +83,13 @@ else
 
     # dnf repoclosure will/should expose any issues with the repository metadata
     truncate -s0 "${log_base}.repoclosure.out"
-    log_msg "Running:\n\t${rc_cmd} ..." "${log_base}.repoclosure.out"
-    bash -c "${rc_cmd}" 2>&1 | tee -a "${log_base}.repoclosure.out"
+    log_msg "Running dnf repoclosure..." "${log_base}.repoclosure.out"
+    bash -x -c "${rc_cmd}" 2>&1 | tee -a "${log_base}.repoclosure.out"
 
     # potential_conflict.py should uncover any packages with package or unanticipated file conflicts
     truncate -s0 "${log_base}.package_file_conflicts.out"
-    log_msg "Running:\n\t${pc_cmd} ..." "${log_base}.package_file_conflicts.out"
-    bash -c "${pc_cmd}" 2>&1 | tee "${log_base}.package_file_conflicts.out"
+    log_msg "Running potential_conflicts.py..." "${log_base}.package_file_conflicts.out"
+    bash -x -c "${pc_cmd}" 2>&1 | tee "${log_base}.package_file_conflicts.out"
 
   fi
 
