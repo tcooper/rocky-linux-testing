@@ -74,7 +74,6 @@ else
     truncate -s0 "${log_base}.rhsm.out"
     log_msg "Running:\n\t${pl_cmd} ..." "${log_base}.rhsm.out"
 
-    #package_list=($(bash -c "${pl_cmd}" | tee -a "${log_base}.rhsm.out"))
     mapfile -t package_list < <(bash -c "${pl_cmd}" | tee -a "${log_base}.rhsm.out")
 
     if [[ ${#package_list[@]} -gt 0 ]]
