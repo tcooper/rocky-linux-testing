@@ -51,7 +51,8 @@ else
 
   if [[ "${repodata_dirs[*]}" =~ "repodata" ]]
   then
-    rc_cmd="dnf --verbose repoclosure"
+    rc_cmd="dnf repoclosure"
+    rpm --quiet -q dnf5 && rc_cmd="dnf5 repoclosure"
     pc_cmd="python3 ${dir_path}/potential_conflict.py"
     for rd in "${repodata_dirs[@]}"
     do
