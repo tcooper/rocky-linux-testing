@@ -26,5 +26,9 @@ test -f "${parent_path}/isos/Rocky-${v}-${a}-${t}.iso" && \
 "${parent_path}/scripts/iso_repoclosure_conflicts.sh" \
   -t "${t}" -a "${a}" -v "${v}"
 
+"${parent_path}/scripts/iso_repository_validation.sh" \
+  -t "${t}" -a "${a}" -v "${v}"
+
+# Move ISO to isos/ directory
 mkdir -p "${parent_path}/isos/" && \
   mv "${parent_path}/Rocky-${v}-${a}-${t}.iso" "${parent_path}/isos/"
