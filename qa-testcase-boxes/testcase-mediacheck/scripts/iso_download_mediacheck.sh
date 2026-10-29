@@ -117,13 +117,12 @@ test -f "${iso_name}" || exit 1
 
 # Verify the CHECKSUM file using gpg
 log_msg "Importing: ${iso_key_name} ..." "${log_file}"
-gpg --import "${parent_path}/${iso_key_name}" 2>&1 | \
-  tee -a "${log_base}.mediacheck.out"
-log_msg "Verifying gpg signature: ${parent_path}/${iso_checksum_name}${iso_checksum_sig} ..." | \
-  tee -a "${log_base}.mediacheck.out"
-gpg --verify-files "${parent_path}/${iso_checksum_name}${iso_checksum_sig}" 2>&1 | \
-  tee -a "${log_base}.mediacheck.out" | \
-  grep -Ei 'good signature' || log_msg "WARNING: GPG signature is not recognized"
+bash -x -c "gpg --import ${parent_path}/${iso_key_name}" 2>&1 | \
+  tee -a "${log_file}"
+
+log_msg "Verifying gpg signature: ${parent_path}/${iso_checksum_name}${iso_checksum_sig} ..." "${log_file}"
+bash -x -c "gpg --verify ${parent_path}/${iso_checksum_name}${iso_checksum_sig} ${parent_path}/${iso_checksum_name}" 2>&1 | \
+  tee -a "${log_file}"
 
 # Verify the externally generated sha256sum of the ISO
 log_msg "Verifying sha256sum: ${parent_path}/${iso_name} ..."  "${log_file}"
