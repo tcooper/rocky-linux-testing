@@ -126,10 +126,10 @@ bash -x -c "gpg --verify ${parent_path}/${iso_checksum_name}${iso_checksum_sig} 
 
 # Verify the externally generated sha256sum of the ISO
 log_msg "Verifying sha256sum: ${parent_path}/${iso_name} ..."  "${log_file}"
-sha256sum --ignore-missing -c "${parent_path}/${iso_checksum_name}"  2>&1 | \
+bash -x -c "sha256sum --ignore-missing -c ${parent_path}/${iso_checksum_name}"  2>&1 | \
   tee -a "${log_file}"
 
 # Verify the internal md5sum that is inside the ISO
 log_msg "Verifying internal ISO md5: ${parent_path}/${iso_name} ..." "${log_file}"
-checkisomd5 "${parent_path}/${iso_name}"  2>&1 | \
+bash -x -c "checkisomd5 ${parent_path}/${iso_name}"  2>&1 | \
   tee -a "${log_file}"
