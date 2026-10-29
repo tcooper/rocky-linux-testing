@@ -64,6 +64,9 @@ if ! curl --silent --fail -I "${iso_mirror_base}/${iso_content_dir}/${iso_versio
 then
   log_msg "ERROR: ${iso_mirror_base}/${iso_content_dir}/${iso_version}/isos does NOT exist." "${log_file}"
   exit 1
+else
+  echo "FOUND: ${iso_mirror_base}/${iso_content_dir}/${iso_version}/isos" | \
+  tee -a "${log_file}"
 fi
 
 log_msg "Verifying: ${iso_url} exists..." "${log_file}"
@@ -72,6 +75,7 @@ then
   log_msg "ERROR: ${iso_url} does NOT exist." "${log_file}"
   exit 1
 else
+  echo "FOUND: ${iso_url}" | tee -a "${log_file}"
 fi
 
 # Always re-pull the CHECKSUM and CHECKSUM signature because arches use common filename
