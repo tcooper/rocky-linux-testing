@@ -67,9 +67,10 @@ else
     # insights-client should not be installed by default
     truncate -s0 "${log_base}.insights.out"
     log_msg "Running:\n\t${in_cmd} ..." "${log_base}.insights.out"
-    bash -c "${in_cmd}" | tee -a "${log_base}.insights.out"
+    bash -x -c "${in_cmd}" | tee -a "${log_base}.insights.out"
 
-    # redhat-subscription-manager should not include refs to Redhat
+    # Packages requiring redhat-subscription-manager should not include refs to
+    # other Redhat packages
     truncate -s0 "${log_base}.rhsm.out"
     log_msg "Running:\n\t${pl_cmd} ..." "${log_base}.rhsm.out"
 
@@ -78,8 +79,8 @@ else
 
     rhsm_cmd="${rhsm_cmd} ${package_list[*]}"
 
-    log_msg "Running:\n\t${rhsm_cmd} ..." "${log_base}.rhsm.out"
-    bash -c "${rhsm_cmd}" | tee "${log_base}.rhsm.out"
+      log_msg "Running:\n\t${rhsm_cmd} ..." "${log_base}.rhsm.out"
+      bash -x -c "${rhsm_cmd}" | tee "${log_base}.rhsm.out"
 
   fi
 
